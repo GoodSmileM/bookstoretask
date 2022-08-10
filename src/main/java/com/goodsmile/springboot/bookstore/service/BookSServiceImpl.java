@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.Id;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -15,6 +16,7 @@ public class BookSServiceImpl implements BookService{
 
     @Override
     public void addNewBook(Book book) {
+        bookDao.save(book);
 
     }
 
@@ -30,7 +32,7 @@ public class BookSServiceImpl implements BookService{
     }
 
     @Override
-    public Book[] getAll() {
-        return new Book[0];
+    public List<Book> getAll() {
+        return bookDao.findAll();
     }
 }
