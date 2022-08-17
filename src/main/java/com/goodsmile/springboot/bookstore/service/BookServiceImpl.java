@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class BookSServiceImpl implements BookService{
+public class BookServiceImpl implements BookService{
     @Autowired
     private BookDao bookDao;
 

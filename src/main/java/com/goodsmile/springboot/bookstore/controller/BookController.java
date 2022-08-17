@@ -1,7 +1,7 @@
 package com.goodsmile.springboot.bookstore.controller;
 
 import com.goodsmile.springboot.bookstore.model.Book;
-import com.goodsmile.springboot.bookstore.service.BookSServiceImpl;
+import com.goodsmile.springboot.bookstore.service.BookServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,17 +14,17 @@ import java.util.Optional;
 @Controller
 public class BookController {
     @Autowired
-    BookSServiceImpl bookSService;
+    BookServiceImpl bookService;
 
     @PostMapping("/api/addnewbook")
     public void addNewBook(@RequestBody Book book){
-        bookSService.addNewBook(book);
+        bookService.addNewBook(book);
 
     }
 
     @PostMapping("/api/addook")
     public void addBook(@RequestBody Book book){
-        bookSService.addNewBook(book);
+        bookService.addNewBook(book);
 
     }
 
@@ -32,12 +32,16 @@ public class BookController {
 
     @GetMapping("/api/book/{id}")
     public String getById(@PathVariable("id") Long id){
-        Optional<Book> result = bookSService.findById(id);
+        Optional<Book> result = bookService.findById(id);
         if(result.isPresent())
             return result.get().toString();
         else return "not found";
     }
 
+    @GetMapping("api/book/booklist")
+    public String getAllBooks(){
+        return bookService.getAll().toString();
+    }
 
 
 }
