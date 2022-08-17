@@ -1,6 +1,6 @@
-package com.goodsmile.springboot.bookstore.dao;
+package com.epam.bookstore.dao;
 
-import com.goodsmile.springboot.bookstore.model.Book;
+import com.epam.bookstore.model.Book;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.io.Serializable;

@@ -1,4 +1,4 @@
-package com.goodsmile.springboot.bookstore;
+package com.epam.bookstore;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

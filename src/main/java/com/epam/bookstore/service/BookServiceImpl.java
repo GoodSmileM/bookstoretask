@@ -1,11 +1,10 @@
-package com.goodsmile.springboot.bookstore.service;
+package com.epam.bookstore.service;
 
-import com.goodsmile.springboot.bookstore.dao.BookDao;
-import com.goodsmile.springboot.bookstore.model.Book;
+import com.epam.bookstore.dao.BookDao;
+import com.epam.bookstore.model.Book;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.Id;
 import java.util.List;
 import java.util.Optional;
 

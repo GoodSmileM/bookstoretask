@@ -1,7 +1,7 @@
-package com.goodsmile.springboot.bookstore.controller;
+package com.epam.bookstore.controller;
 
-import com.goodsmile.springboot.bookstore.model.Book;
-import com.goodsmile.springboot.bookstore.service.BookServiceImpl;
+import com.epam.bookstore.model.Book;
+import com.epam.bookstore.service.BookServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

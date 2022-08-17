@@ -1,4 +1,4 @@
-package com.goodsmile.springboot.bookstore.controller;
+package com.epam.bookstore.controller;
 
 import org.springframework.stereotype.Controller;
 

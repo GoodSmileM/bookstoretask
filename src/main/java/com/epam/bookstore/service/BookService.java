@@ -1,6 +1,6 @@
-package com.goodsmile.springboot.bookstore.service;
+package com.epam.bookstore.service;
 
-import com.goodsmile.springboot.bookstore.model.Book;
+import com.epam.bookstore.model.Book;
 
 import java.util.List;
 import java.util.Optional;
