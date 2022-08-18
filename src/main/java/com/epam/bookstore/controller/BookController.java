@@ -58,7 +58,13 @@ public class BookController {
     public String sellBook(@PathVariable("id")Long id){
         Optional<Book> result = bookService.findById(id);
         Book book=result.get();
-        return "";
+        if(book.getSold()>0){
+            book.setSold(book.getSold()-1);
+            return "sold";
+        }
+
+        else return "sold out";
+
     }
 
 
