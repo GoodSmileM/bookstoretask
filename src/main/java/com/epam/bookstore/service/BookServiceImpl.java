@@ -20,7 +20,9 @@ public class BookServiceImpl implements BookService{
     }
 
     @Override
-    public void addBook(Book book) {
+    public void addBook(Long id,int amount) {
+        Book book=bookDao.findById(id).get();
+        book.setTotalCount(book.getTotalCount()+1);
         bookDao.save(book);
     }
 
