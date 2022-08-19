@@ -13,7 +13,7 @@ import javax.persistence.Table;
 public class Book {
     @Id
     @Column(name = "id")
-    private int Id;
+    private Long Id;
 
     @Column(name = "author")
     private String Author;
