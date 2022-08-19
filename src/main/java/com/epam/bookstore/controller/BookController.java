@@ -20,9 +20,9 @@ public class BookController {
 
     }
 
-    @PostMapping("/api/addook")
-    public void addBook(@RequestBody Book book){
-        bookService.addNewBook(book);
+    @PostMapping("/api/addbook")
+    public void addBook(Long id,int amount){
+        bookService.addBook(id,amount);
 
     }
 

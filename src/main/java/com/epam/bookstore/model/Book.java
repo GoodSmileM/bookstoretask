@@ -24,8 +24,8 @@ public class Book {
     @Column(name = "price")
     private double Price;
 
-    @Column(name = "totalcount")
-    private int TotalCount;
+    @Column(name = "total_count")
+    private int totalCount;
 
     @Column(name = "sold")
     private int Sold;
