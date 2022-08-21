@@ -31,4 +31,6 @@ public class Book {
 
     @Column(name = "sold")
     private int Sold;
+
+
 }

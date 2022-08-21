@@ -1,8 +1,9 @@
 package com.epam.bookstore.dto;
 
 
+import lombok.Data;
 
-
+@Data
 public class BookDTO {
 
     private Long Id;

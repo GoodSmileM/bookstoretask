@@ -49,8 +49,28 @@ public class BookController {
     }
 
     @PostMapping("api/book/{id}")
-    public String updateBook(BookDTO bookDTO){
-        return "";
+    public String updateBook(@RequestBody BookDTO bookDTO,@PathVariable("id") Long id){
+        if(bookDTO.getId()==null){
+            Book book=bookService.findById(id).get();
+            book.setAuthor(bookDTO.getAuthor());
+            book.setTitle(bookDTO.getTitle());
+            book.setTotalCount(bookDTO.getTotalCount());
+            book.setSold(bookDTO.getSold());
+            bookService.addNewBook(book);
+            return "book updated";
+        }
+        else if(bookDTO.getId()!=id) return "id wrong";
+        else {
+            Book book=bookService.findById(id).get();
+            book.setAuthor(bookDTO.getAuthor());
+            book.setTitle(bookDTO.getTitle());
+            book.setTotalCount(bookDTO.getTotalCount());
+            book.setSold(bookDTO.getSold());
+            bookService.addNewBook(book);
+            return "book updated";
+        }
+
+
     }
 
 
