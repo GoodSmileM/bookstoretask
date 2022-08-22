@@ -6,20 +6,20 @@ import lombok.Data;
 @Data
 public class BookDTO {
 
-    private Long Id;
+    private Long id;
 
 
-    private String Author;
+    private String author;
 
 
-    private String Title;
+    private String title;
 
 
-    private double Price;
+    private double price;
 
 
     private int totalCount;
 
 
-    private int Sold;
+    private int sold;
 }

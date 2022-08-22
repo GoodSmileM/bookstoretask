@@ -15,22 +15,22 @@ import javax.persistence.Table;
 public class Book {
     @Id
     @Column(name = "id")
-    private Long Id;
+    private Long id;
 
     @Column(name = "author")
-    private String Author;
+    private String author;
 
     @Column(name = "title")
-    private String Title;
+    private String title;
 
     @Column(name = "price")
-    private double Price;
+    private double price;
 
     @Column(name = "total_count")
     private int totalCount;
 
     @Column(name = "sold")
-    private int Sold;
+    private int sold;
 
 
 }
