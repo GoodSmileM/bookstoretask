@@ -22,7 +22,7 @@ public class BookServiceImpl implements BookService{
     @Override
     public void addBook(Long id,int amount) {
         Book book=bookDao.findById(id).get();
-        book.setTotalCount(book.getTotalCount()+1);
+        book.setTotalCount(book.getTotalCount()+amount);
         bookDao.save(book);
     }
 
