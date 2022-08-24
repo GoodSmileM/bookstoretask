@@ -1,9 +1,11 @@
 package com.epam.bookstore.controller;
 
 import com.epam.bookstore.dto.BookDTO;
+import com.epam.bookstore.dto.SellDTO;
+import com.epam.bookstore.exception.BookNumberException;
 import com.epam.bookstore.exception.IdNotMatchException;
-import com.epam.bookstore.model.Book;
-import com.epam.bookstore.service.BookServiceImpl;
+import com.epam.bookstore.entity.Book;
+import com.epam.bookstore.impl.BookServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,11 +16,14 @@ public class BookController {
     @Autowired
     BookServiceImpl bookService;
 
+    private static final String ID_NOT_FOUND = "id not found";
+
     @PostMapping("/api/addnewbook")
     public void addNewBook(@RequestBody BookDTO bookDTO){
         Book book=new Book();
         book.setId(book.getId());
         book.setTitle(bookDTO.getTitle());
+        book.setCategory(bookDTO.getCategory());
         book.setAuthor(bookDTO.getAuthor());
         book.setTotalCount(bookDTO.getTotalCount());
         book.setSold(bookDTO.getSold());
@@ -50,6 +55,8 @@ public class BookController {
     @GetMapping("api/number-of-books/{id}")
     public String getBookNumber(@PathVariable("id")Long id){
         Optional<Book> result = bookService.findById(id);
+        if(!result.isPresent())
+            return ID_NOT_FOUND;
         Book book=result.get();
         return String.valueOf(book.getTotalCount());
     }
@@ -60,35 +67,58 @@ public class BookController {
 
 
         if(bookDTO.getId()==null||bookDTO.getId()==0){
-            Book book=bookService.findById(id).get();
+            Optional<Book> result = bookService.findById(id);
+            if(!result.isPresent())
+                return ID_NOT_FOUND;
+            Book book=result.get();
             book.setAuthor(bookDTO.getAuthor());
             book.setTitle(bookDTO.getTitle());
+            book.setCategory(bookDTO.getCategory());
             book.setTotalCount(bookDTO.getTotalCount());
             book.setSold(bookDTO.getSold());
             bookService.addNewBook(book);
             return "book updated";
         }
 
-        else if(bookDTO.getId()!=id) throw  new IdNotMatchException("输入id不匹配");
+        else if(!bookDTO.getId().equals(id)) throw  new IdNotMatchException("输入id不匹配");
         else return "error";
 
     }
 
 
     @PostMapping("api/sell-book/{id}")
-    public String sellBook(@PathVariable("id")Long id){
+    public String sellBook(@PathVariable("id")Long id) throws BookNumberException{
         Optional<Book> result = bookService.findById(id);
         if(!result.isPresent())
-            return "id not found";
+            return ID_NOT_FOUND;
         Book book=result.get();
         if(book.getSold()>0){
-            book.setSold(book.getSold()-1);
+            book.setTotalCount(book.getTotalCount()-1);
+            book.setSold(book.getSold()+1);
             return "sold";
         }
 
-        else return "sold out";
+        else throw new BookNumberException("sold out");
 
     }
+
+    @PutMapping("api/sell-books")
+    public String sellBooks(SellDTO sellDTO) throws BookNumberException {
+        Long id = sellDTO.getId();
+        int amount = sellDTO.getNumber();
+        Optional<Book> result = bookService.findById(id);
+        if(!result.isPresent())
+            return ID_NOT_FOUND;
+        Book book=result.get();
+        if(book.getTotalCount()<amount) throw new BookNumberException("sold out");
+        book.setTotalCount(book.getTotalCount()-amount);
+        book.setSold(book.getSold()+amount);
+        return "sell success";
+
+
+
+    }
+
 
 
 

@@ -15,6 +15,9 @@ public class BookDTO {
     private String title;
 
 
+    private String category;
+
+
     private double price;
 
 

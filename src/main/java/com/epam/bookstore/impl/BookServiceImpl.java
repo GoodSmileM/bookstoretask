@@ -1,7 +1,8 @@
-package com.epam.bookstore.service;
+package com.epam.bookstore.impl;
 
 import com.epam.bookstore.dao.BookDao;
-import com.epam.bookstore.model.Book;
+import com.epam.bookstore.entity.Book;
+import com.epam.bookstore.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class BookServiceImpl implements BookService{
+public class BookServiceImpl implements BookService {
     @Autowired
     private BookDao bookDao;
 

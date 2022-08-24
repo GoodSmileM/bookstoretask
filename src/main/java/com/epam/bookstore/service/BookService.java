@@ -1,6 +1,6 @@
 package com.epam.bookstore.service;
 
-import com.epam.bookstore.model.Book;
+import com.epam.bookstore.entity.Book;
 
 import java.util.List;
 import java.util.Optional;
