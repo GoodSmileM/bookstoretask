@@ -1,6 +1,6 @@
 package com.epam.bookstore.exception;
 
-public class IdNotMatchException extends RuntimeException{
+public class IdNotMatchException extends RuntimeException {
     public IdNotMatchException() {
     }
 

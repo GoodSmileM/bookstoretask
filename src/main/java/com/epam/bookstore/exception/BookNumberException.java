@@ -1,8 +1,7 @@
 package com.epam.bookstore.exception;
 
 
-
-public class BookNumberException extends RuntimeException{
+public class BookNumberException extends RuntimeException {
 
     public BookNumberException() {
     }

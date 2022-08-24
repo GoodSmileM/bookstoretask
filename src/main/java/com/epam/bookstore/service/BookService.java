@@ -7,7 +7,12 @@ import java.util.Optional;
 
 public interface BookService {
     void addNewBook(Book book);
-    void addBook(Long id,int amount);
+
+    void addBook(Long id, int amount);
+
     Optional<Book> findById(Long id);
+
     List<Book> getAll();
+
+    List<Book> findByCategoryAndKeyword(String keyword, String category);
 }
