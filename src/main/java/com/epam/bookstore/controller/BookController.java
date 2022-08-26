@@ -7,6 +7,8 @@ import com.epam.bookstore.exception.IdNotMatchException;
 import com.epam.bookstore.entity.Book;
 import com.epam.bookstore.service.impl.BookServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -40,11 +42,11 @@ public class BookController {
 
 
     @GetMapping("/api/book/{id}")
-    public String getById(@PathVariable("id") Long id) {
+    public ResponseEntity<Book> getById(@PathVariable("id") Long id) {
         Optional<Book> result = bookService.findById(id);
         if (result.isPresent())
-            return result.get().toString();
-        else return "not found";
+            return new ResponseEntity<>(result.get(), HttpStatus.OK);
+        else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @GetMapping("api/book/book-list")
