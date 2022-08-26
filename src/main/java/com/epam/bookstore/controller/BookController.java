@@ -2,16 +2,16 @@ package com.epam.bookstore.controller;
 
 import com.epam.bookstore.dto.BookDTO;
 import com.epam.bookstore.dto.SellDTO;
-import com.epam.bookstore.exception.BookNumberException;
-import com.epam.bookstore.exception.IdNotMatchException;
+import com.epam.bookstore.dto.common.ResultBody;
+import com.epam.bookstore.enums.ResultEnum;
+import com.epam.bookstore.exception.BookErrorException;
 import com.epam.bookstore.entity.Book;
 import com.epam.bookstore.service.impl.BookServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+
 import java.util.Optional;
 
 @RestController
@@ -19,10 +19,9 @@ public class BookController {
     @Autowired
     BookServiceImpl bookService;
 
-    private static final String ID_NOT_FOUND = "id not found";
 
     @PostMapping("/api/addnewbook")
-    public void addNewBook(@RequestBody BookDTO bookDTO) {
+    public ResponseEntity<ResultBody> addNewBook(@RequestBody BookDTO bookDTO) {
         Book book = new Book();
         book.setId(book.getId());
         book.setTitle(bookDTO.getTitle());
@@ -31,46 +30,47 @@ public class BookController {
         book.setTotalCount(bookDTO.getTotalCount());
         book.setSold(bookDTO.getSold());
         bookService.addNewBook(book);
+        return ResponseEntity.ok(ResultBody.success(book).message("已成功添加书本"));
 
     }
 
     @PostMapping("/api/addbook")
-    public void addBook(Long id, int amount) {
-        bookService.addBook(id, amount);
-
+    public ResponseEntity<ResultBody> addBook(Long id, int amount) {
+        Book book = bookService.addBook(id, amount);
+        return ResponseEntity.ok(ResultBody.success(book).message("书本已添加"));
     }
 
 
     @GetMapping("/api/book/{id}")
-    public ResponseEntity<Book> getById(@PathVariable("id") Long id) {
+    public ResponseEntity<ResultBody> getById(@PathVariable("id") Long id) {
         Optional<Book> result = bookService.findById(id);
         if (result.isPresent())
-            return new ResponseEntity<>(result.get(), HttpStatus.OK);
-        else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return ResponseEntity.ok(ResultBody.success(result.get()));
+        else throw new BookErrorException(ResultEnum.ID_NOT_FOUND);
     }
 
     @GetMapping("api/book/book-list")
-    public String getAllBooks() {
-        return bookService.getAll().toString();
+    public ResponseEntity<ResultBody> getAllBooks() {
+        return ResponseEntity.ok(ResultBody.success(bookService.getAll()));
     }
 
     @GetMapping("api/number-of-books/{id}")
-    public String getBookNumber(@PathVariable("id") Long id) {
+    public ResponseEntity<ResultBody> getBookNumber(@PathVariable("id") Long id) {
         Optional<Book> result = bookService.findById(id);
         if (!result.isPresent())
-            return ID_NOT_FOUND;
+            throw new BookErrorException(ResultEnum.ID_NOT_FOUND);
         Book book = result.get();
-        return String.valueOf(book.getTotalCount());
+        return ResponseEntity.ok(ResultBody.success(book));
     }
 
     @PostMapping("api/book/{id}")
-    public String updateBook(@RequestBody BookDTO bookDTO, @PathVariable("id") Long id) throws IdNotMatchException {
+    public ResponseEntity<ResultBody> updateBook(@RequestBody BookDTO bookDTO, @PathVariable("id") Long id) throws BookErrorException {
 
 
         if (bookDTO.getId() == null || bookDTO.getId() == 0) {
             Optional<Book> result = bookService.findById(id);
             if (!result.isPresent())
-                return ID_NOT_FOUND;
+                throw new BookErrorException(ResultEnum.ID_NOT_FOUND);
             Book book = result.get();
             book.setAuthor(bookDTO.getAuthor());
             book.setTitle(bookDTO.getTitle());
@@ -78,47 +78,47 @@ public class BookController {
             book.setTotalCount(bookDTO.getTotalCount());
             book.setSold(bookDTO.getSold());
             bookService.addNewBook(book);
-            return "book updated";
-        } else if (!bookDTO.getId().equals(id)) throw new IdNotMatchException("输入id不匹配");
-        else return "error";
+            return ResponseEntity.ok(ResultBody.success(book));
+        } else if (!bookDTO.getId().equals(id)) throw new BookErrorException(ResultEnum.ID_NOT_MATCH);
+        else throw new BookErrorException(ResultEnum.UNEXPECTED_ERROR);
 
     }
 
 
     @PostMapping("api/sell-book/{id}")
-    public String sellBook(@PathVariable("id") Long id) throws BookNumberException {
+    public ResponseEntity<ResultBody> sellBook(@PathVariable("id") Long id) throws BookErrorException {
         Optional<Book> result = bookService.findById(id);
         if (!result.isPresent())
-            return ID_NOT_FOUND;
+            throw new BookErrorException(ResultEnum.ID_NOT_FOUND);
         Book book = result.get();
         if (book.getSold() > 0) {
             book.setTotalCount(book.getTotalCount() - 1);
             book.setSold(book.getSold() + 1);
-            return "sold";
-        } else throw new BookNumberException("sold out");
+            return ResponseEntity.ok(ResultBody.success(book).message("售卖成功"));
+        } else throw new BookErrorException(ResultEnum.BOOK_SOLD_OUT);
 
     }
 
     @PutMapping("api/sell-books")
-    public String sellBooks(SellDTO sellDTO) throws BookNumberException {
+    public ResponseEntity<ResultBody> sellBooks(SellDTO sellDTO) throws BookErrorException {
         Long id = sellDTO.getId();
         int amount = sellDTO.getNumber();
         Optional<Book> result = bookService.findById(id);
         if (!result.isPresent())
-            return ID_NOT_FOUND;
+            throw new BookErrorException(ResultEnum.ID_NOT_MATCH);
         Book book = result.get();
-        if (book.getTotalCount() < amount) throw new BookNumberException("sold out");
+        if (book.getTotalCount() < amount) throw new BookErrorException(ResultEnum.BOOK_SOLD_OUT);
         book.setTotalCount(book.getTotalCount() - amount);
         book.setSold(book.getSold() + amount);
-        return "sell success";
+        return ResponseEntity.ok(ResultBody.success(book).message("售卖成功"));
 
 
     }
 
     @GetMapping("api/books?keyword=keyword&category=category")
-    public List<Book> getBookByKeywordAndCategory(String keyword, String category) {
+    public ResponseEntity<ResultBody> getBookByKeywordAndCategory(String keyword, String category) {
 
-        return bookService.findByCategoryAndKeyword(keyword, category);
+        return ResponseEntity.ok(ResultBody.success(bookService.findByCategoryAndKeyword(keyword, category)));
     }
 
 

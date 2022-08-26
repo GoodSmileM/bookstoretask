@@ -1,18 +1,15 @@
 package com.epam.bookstore.exception;
 
 
+import com.epam.bookstore.dto.common.ResultBody;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.servlet.ModelAndView;
+
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
-    @ExceptionHandler(IdNotMatchException.class)
-    public ModelAndView idException(Exception e) {
-        e.printStackTrace();
-        ModelAndView mv = new ModelAndView();
-        mv.addObject("message", e.getMessage());
-        mv.setViewName("error");
-        return mv;
+    @ExceptionHandler(BookErrorException.class)
+    public ResultBody bookNumberExceptionHandler(BookErrorException e) {
+        return ResultBody.error(e.getCode(), e.getMsg());
     }
 }
