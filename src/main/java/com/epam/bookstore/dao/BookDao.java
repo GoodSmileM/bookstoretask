@@ -13,6 +13,7 @@ public interface BookDao extends JpaRepository<Book, Long>, Serializable {
 
     List<Book> findByCategory(String category);
 
+
     @Query(value = "select * from book_info where category=?1 and (id like ?2 or author like ?2 or title like ?2)", nativeQuery = true)
     List<Book> findByCategoryAndKeyword(String category, String keyword);
 

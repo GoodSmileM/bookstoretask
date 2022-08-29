@@ -7,6 +7,7 @@ import com.epam.bookstore.exception.BookErrorException;
 import com.epam.bookstore.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Optional;
@@ -57,7 +58,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public Integer findSoldByCategoryAndKeyword(String keyword, String category) {
         Integer result;
-        if (keyword == null || keyword.isEmpty())
+        if (StringUtils.hasText(category))
             result = bookDao.findSoldByCategory(category);
 
         else result = bookDao.findSoldByCategoryAndKeyword(keyword, category);
