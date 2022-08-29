@@ -21,7 +21,7 @@ public class ResultBody {
     }
 
     public static ResultBody success(Object data) {
-        return new ResultBody(data).success(true);
+        return new ResultBody(data).success(true).code(0);
     }
 
     public static ResultBody error(Integer code, String message) {

@@ -11,7 +11,7 @@ public interface BookService {
 
     Book addBook(Long id, int amount);
 
-    Optional<Book> findById(Long id);
+    Book findById(Long id);
 
     List<Book> getAll();
 

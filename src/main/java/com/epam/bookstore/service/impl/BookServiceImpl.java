@@ -2,6 +2,8 @@ package com.epam.bookstore.service.impl;
 
 import com.epam.bookstore.dao.BookDao;
 import com.epam.bookstore.entity.Book;
+import com.epam.bookstore.enums.ResultEnum;
+import com.epam.bookstore.exception.BookErrorException;
 import com.epam.bookstore.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,9 +32,11 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Optional<Book> findById(Long id) {
-        return bookDao.findById(id);
-
+    public Book findById(Long id) {
+        Optional<Book> result = bookDao.findById(id);
+        if (result.isPresent())
+            return result.get();
+        else throw new BookErrorException(ResultEnum.ID_NOT_FOUND);
     }
 
     @Override
