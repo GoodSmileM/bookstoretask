@@ -16,4 +16,6 @@ public interface BookService {
     List<Book> getAll();
 
     List<Book> findByCategoryAndKeyword(String keyword, String category);
+
+    Integer findSoldByCategoryAndKeyword(String keyword,String category);
 }

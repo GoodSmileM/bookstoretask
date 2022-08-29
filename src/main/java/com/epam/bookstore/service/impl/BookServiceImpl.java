@@ -49,4 +49,17 @@ public class BookServiceImpl implements BookService {
 
         return books;
     }
+
+    @Override
+    public Integer findSoldByCategoryAndKeyword(String keyword, String category) {
+        Integer result;
+        if (keyword == null || keyword.isEmpty())
+            result = bookDao.findSoldByCategory(category);
+
+        else result = bookDao.findSoldByCategoryAndKeyword(keyword, category);
+
+
+        return result;
+
+    }
 }

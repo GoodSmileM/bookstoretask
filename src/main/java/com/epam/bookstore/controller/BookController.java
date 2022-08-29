@@ -121,6 +121,12 @@ public class BookController {
         return ResponseEntity.ok(ResultBody.success(bookService.findByCategoryAndKeyword(keyword, category)));
     }
 
+    @GetMapping("/api/number-of-books?keyword=keyword&category=category")
+    public ResponseEntity<ResultBody> getBookNumberByKeywordAndCategory(String keyword, String category) {
+
+        return ResponseEntity.ok(ResultBody.success(bookService.findSoldByCategoryAndKeyword(keyword, category)));
+
+    }
 
 }
 
