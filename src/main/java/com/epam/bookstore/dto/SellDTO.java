@@ -5,8 +5,8 @@ import lombok.Data;
 @Data
 public class SellDTO {
 
-    Long id;
+    private Long id;
 
-    int number;
+    private int number;
 
 }

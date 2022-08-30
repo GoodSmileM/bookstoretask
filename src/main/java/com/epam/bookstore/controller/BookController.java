@@ -20,15 +20,7 @@ public class BookController {
 
     @PostMapping("/api/addnewbook")
     public ResponseEntity<ResultBody> addNewBook(@RequestBody BookDTO bookDTO) {
-        Book book = new Book();
-        book.setId(bookDTO.getId());
-        book.setTitle(bookDTO.getTitle());
-        book.setCategory(bookDTO.getCategory());
-        book.setPrice(bookDTO.getPrice());
-        book.setAuthor(bookDTO.getAuthor());
-        book.setTotalCount(bookDTO.getTotalCount());
-        book.setSold(bookDTO.getSold());
-        bookService.addNewBook(book);
+        Book book = bookService.addNewBook(bookDTO);
         return ResponseEntity.ok(ResultBody.success(book).message("已成功添加书本"));
 
     }
@@ -55,21 +47,13 @@ public class BookController {
     @GetMapping("api/number-of-books/{id}")
     public ResponseEntity<ResultBody> getBookNumber(@PathVariable("id") Long id) {
         Book book = bookService.findById(id);
-        return ResponseEntity.ok(ResultBody.success(book));
+        return ResponseEntity.ok(ResultBody.success(book.getTotalCount()));
     }
 
     @PostMapping("api/book/{id}")
     public ResponseEntity<ResultBody> updateBook(@RequestBody BookDTO bookDTO, @PathVariable("id") Long id) throws BookErrorException {
-
-
-        if (bookDTO.getId() == null || bookDTO.getId() == 0) {
-            Book book = bookService.findById(id);
-            book.setAuthor(bookDTO.getAuthor());
-            book.setTitle(bookDTO.getTitle());
-            book.setCategory(bookDTO.getCategory());
-            book.setTotalCount(bookDTO.getTotalCount());
-            book.setSold(bookDTO.getSold());
-            bookService.addNewBook(book);
+        if (bookDTO.getId() == null || bookDTO.getId() == 0 || bookDTO.getId() == id) {
+            Book book = bookService.updateBook(bookDTO, id);
             return ResponseEntity.ok(ResultBody.success(book));
         } else if (!bookDTO.getId().equals(id)) throw new BookErrorException(ResultEnum.ID_NOT_MATCH);
         else throw new BookErrorException(ResultEnum.UNEXPECTED_ERROR);
@@ -79,39 +63,22 @@ public class BookController {
 
     @PostMapping("api/sell-book/{id}")
     public ResponseEntity<ResultBody> sellBook(@PathVariable("id") Long id) throws BookErrorException {
-        Book book = bookService.findById(id);
-        if (book.getSold() > 0) {
-            book.setTotalCount(book.getTotalCount() - 1);
-            book.setSold(book.getSold() + 1);
-            return ResponseEntity.ok(ResultBody.success(book).message("售卖成功"));
-        } else throw new BookErrorException(ResultEnum.BOOK_SOLD_OUT);
-
+        return ResponseEntity.ok(ResultBody.success(bookService.sellOneBook(id)));
     }
 
-    @PutMapping("api/sell-books")
-    public ResponseEntity<ResultBody> sellBooks(SellDTO sellDTO) throws BookErrorException {
-        Long id = sellDTO.getId();
-        int amount = sellDTO.getNumber();
-        Book book = bookService.findById(id);
-        if (book.getTotalCount() < amount) throw new BookErrorException(ResultEnum.BOOK_SOLD_OUT);
-        book.setTotalCount(book.getTotalCount() - amount);
-        book.setSold(book.getSold() + amount);
-        return ResponseEntity.ok(ResultBody.success(book).message("售卖成功"));
-
-
+    @PostMapping("api/sell-books")
+    public ResponseEntity<ResultBody> sellBooks(@RequestBody SellDTO sellDTO) throws BookErrorException {
+        return ResponseEntity.ok(ResultBody.success(bookService.sellBooks(sellDTO)).message("售卖成功"));
     }
 
     @GetMapping("api/books")
     public ResponseEntity<ResultBody> getBookByKeywordAndCategory(String keyword, String category) {
-
         return ResponseEntity.ok(ResultBody.success(bookService.findByCategoryAndKeyword(keyword, category)));
     }
 
     @GetMapping("/api/number-of-books")
     public ResponseEntity<ResultBody> getBookNumberByKeywordAndCategory(String keyword, String category) {
-
-        return ResponseEntity.ok(ResultBody.success(bookService.findSoldByCategoryAndKeyword(keyword, category)));
-
+        return ResponseEntity.ok(ResultBody.success(bookService.countSoldByCategoryAndKeyword(keyword, category)));
     }
 
 }
