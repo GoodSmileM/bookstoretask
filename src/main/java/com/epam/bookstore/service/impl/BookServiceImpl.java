@@ -18,8 +18,11 @@ import java.util.Optional;
 
 @Service
 public class BookServiceImpl implements BookService {
-    @Autowired
-    private BookDao bookDao;
+    private final BookDao bookDao;
+
+    public BookServiceImpl(BookDao bookDao) {
+        this.bookDao = bookDao;
+    }
 
     @Override
     public Book addNewBook(BookDTO bookDTO) {
