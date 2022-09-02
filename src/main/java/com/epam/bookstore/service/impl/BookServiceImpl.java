@@ -62,9 +62,12 @@ public class BookServiceImpl implements BookService {
     public Book updateBook(BookDTO bookDTO, Long id) {
         Book book;
         Optional<Book> result = bookDao.findById(id);
-        if (result.isPresent())
+        if (result.isPresent()) {
             book = result.get();
-        else throw new BookErrorException(ResultEnum.ID_NOT_FOUND);
+        } else throw new BookErrorException(ResultEnum.ID_NOT_FOUND);
+        if(!book.getId().equals(id)){
+            throw new BookErrorException(ResultEnum.ID_NOT_MATCH);
+        }
         book.setAuthor(bookDTO.getAuthor());
         book.setTitle(bookDTO.getTitle());
         book.setPrice(bookDTO.getPrice());

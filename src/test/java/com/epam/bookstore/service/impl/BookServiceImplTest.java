@@ -13,7 +13,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -36,6 +35,7 @@ class BookServiceImplTest {
     private static final Book UPDATE_BOOK_ENTITY = new Book(1L, "Marquez", "One Hundred Years of Solitude", "novel", 200, 100, 0);
     private static final BookDTO UPDATE_BOOK_DTO = new BookDTO(1L, "Marquez", "One Hundred Years of Solitude", "novel", 200, 100, 0);
     private static final Book WRONG_BOOK_ENTITY = new Book(2L, "Jack London", "The Call of the Wild", "novel", 200, 100, 100);
+    private static final BookDTO WRONG_BOOK_DTO = new BookDTO(2L, "Jack London", "The Call of the Wild", "novel", 200, 100, 100);
     private static final Book ZERO_BOOK_ENTITY = new Book(1L, "Marquez", "One Hundred Years of Solitude", "novel", 100, 0, 0);
     private static final BookDTO ZERO_BOOK_DTO = new BookDTO(1L, "Marquez", "One Hundred Years of Solitude", "novel", 100, 0, 0);
     private static final SellDTO SELL_DTO = new SellDTO(1L, 100);
@@ -105,7 +105,7 @@ class BookServiceImplTest {
     void updateBookError() {
         Mockito.when(bookDao.findById(any())).thenReturn(Optional.of(WRONG_BOOK_ENTITY));
         try {
-            bookService.updateBook(NONEXISTENT_BOOK_DTO, NEW_ID);
+            bookService.updateBook(WRONG_BOOK_DTO, ID);
             Assertions.fail("no expected exception thrown");
         } catch (BookErrorException e) {
             Assertions.assertEquals(-2, e.getCode());
@@ -156,8 +156,9 @@ class BookServiceImplTest {
     void findByCategoryOnly() {
         BOOK_ENTITY_LIST.add(EXISTENT_BOOK_ENTITY);
         BOOK_ENTITY_LIST.add(WRONG_BOOK_ENTITY);
+        System.out.println(BOOK_ENTITY_LIST);
         Mockito.when(bookDao.findByCategory(CATEGORY)).thenReturn(BOOK_ENTITY_LIST);
-        Assertions.assertFalse(bookService.findByCategoryAndKeyword(CATEGORY, "").isEmpty());
+        Assertions.assertFalse(bookService.findByCategoryAndKeyword("", CATEGORY).isEmpty());
     }
 
     @Test
@@ -171,14 +172,14 @@ class BookServiceImplTest {
     void countByCategoryOnly() {
         BOOK_ENTITY_LIST.add(EXISTENT_BOOK_ENTITY);
         BOOK_ENTITY_LIST.add(WRONG_BOOK_ENTITY);
-        Mockito.when(bookDao.findByCategory(CATEGORY)).thenReturn(BOOK_ENTITY_LIST);
-        Assertions.assertEquals(TOTAL_SOLD, bookService.countSoldByCategoryAndKeyword(CATEGORY, ""));
+        Mockito.when(bookDao.countSoldByCategory(CATEGORY)).thenReturn(TOTAL_SOLD);
+        Assertions.assertEquals(TOTAL_SOLD, bookService.countSoldByCategoryAndKeyword("", CATEGORY));
     }
 
     @Test
     void countByCategoryAndKeyword() {
         BOOK_ENTITY_LIST.add(EXISTENT_BOOK_ENTITY);
-        Mockito.when(bookDao.findByCategoryAndKeyword(CATEGORY, KEYWORD)).thenReturn(BOOK_ENTITY_LIST);
-        Assertions.assertEquals(SOLD,bookService.countSoldByCategoryAndKeyword(CATEGORY, KEYWORD));
+        Mockito.when(bookDao.countSoldByCategoryAndKeyword(KEYWORD, CATEGORY)).thenReturn(SOLD);
+        Assertions.assertEquals(SOLD, bookService.countSoldByCategoryAndKeyword(KEYWORD, CATEGORY));
     }
 }
