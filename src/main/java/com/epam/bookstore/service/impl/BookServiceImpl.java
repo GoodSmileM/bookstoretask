@@ -8,7 +8,9 @@ import com.epam.bookstore.entity.Book;
 import com.epam.bookstore.enums.ResultEnum;
 import com.epam.bookstore.exception.BookErrorException;
 import com.epam.bookstore.service.BookService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -17,12 +19,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class BookServiceImpl implements BookService {
-    private final BookDao bookDao;
+@RequiredArgsConstructor
 
-    public BookServiceImpl(BookDao bookDao) {
-        this.bookDao = bookDao;
-    }
+public class BookServiceImpl implements BookService {
+
+    @Autowired
+    private final BookDao bookDao;
 
     @Override
     public Book addNewBook(BookDTO bookDTO) {
@@ -47,7 +49,9 @@ public class BookServiceImpl implements BookService {
             book.setTotalCount(book.getTotalCount() + amount);
             bookDao.save(book);
             return book;
-        } else throw new BookErrorException(ResultEnum.ID_NOT_FOUND);
+        } else {
+            throw new BookErrorException(ResultEnum.ID_NOT_FOUND);
+        }
     }
 
     @Override
@@ -55,7 +59,9 @@ public class BookServiceImpl implements BookService {
         Optional<Book> result = bookDao.findById(id);
         if (result.isPresent())
             return result.get();
-        else throw new BookErrorException(ResultEnum.ID_NOT_FOUND);
+        else {
+            throw new BookErrorException(ResultEnum.ID_NOT_FOUND);
+        }
     }
 
     @Override
@@ -82,15 +88,19 @@ public class BookServiceImpl implements BookService {
     public Book sellOneBook(Long id) {
         Book book;
         Optional<Book> result = bookDao.findById(id);
-        if (result.isPresent())
+        if (result.isPresent()) {
             book = result.get();
-        else throw new BookErrorException(ResultEnum.ID_NOT_FOUND);
+        } else {
+            throw new BookErrorException(ResultEnum.ID_NOT_FOUND);
+        }
         if (book.getTotalCount() > 0) {
             book.setTotalCount(book.getTotalCount() - 1);
             book.setSold(book.getSold() + 1);
             bookDao.save(book);
             return book;
-        } else throw new BookErrorException(ResultEnum.BOOK_SOLD_OUT);
+        } else {
+            throw new BookErrorException(ResultEnum.BOOK_SOLD_OUT);
+        }
     }
 
     @Override
@@ -101,7 +111,9 @@ public class BookServiceImpl implements BookService {
         Optional<Book> result = bookDao.findById(id);
         if (result.isPresent())
             book = result.get();
-        else throw new BookErrorException(ResultEnum.ID_NOT_FOUND);
+        else {
+            throw new BookErrorException(ResultEnum.ID_NOT_FOUND);
+        }
         if (book.getTotalCount() < amount) throw new BookErrorException(ResultEnum.BOOK_SOLD_OUT);
         else {
             book.setTotalCount(book.getTotalCount() - amount);
@@ -119,18 +131,22 @@ public class BookServiceImpl implements BookService {
     @Override
     public List<Book> findByCategoryAndKeyword(String keyword, String category) {
         List<Book> books;
-        if (!StringUtils.hasText(keyword))
+        if (!StringUtils.hasText(keyword)) {
             books = bookDao.findByCategory(category);
-        else books = bookDao.findByCategoryAndKeyword(keyword, category);
+        } else {
+            books = bookDao.findByCategoryAndKeyword(keyword, category);
+        }
         return books;
     }
 
     @Override
     public Integer countSoldByCategoryAndKeyword(String keyword, String category) {
         Integer result;
-        if (!StringUtils.hasText(keyword))
+        if (!StringUtils.hasText(keyword)) {
             result = bookDao.countSoldByCategory(category);
-        else result = bookDao.countSoldByCategoryAndKeyword(keyword, category);
+        } else {
+            result = bookDao.countSoldByCategoryAndKeyword(keyword, category);
+        }
         return result;
     }
 }
