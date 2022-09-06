@@ -3,15 +3,10 @@ package com.epam.bookstore.service.impl;
 import com.epam.bookstore.dao.BookDao;
 import com.epam.bookstore.dto.BookDTO;
 import com.epam.bookstore.dto.SellDTO;
-import com.epam.bookstore.dto.common.ResultBody;
 import com.epam.bookstore.entity.Book;
 import com.epam.bookstore.enums.ResultEnum;
 import com.epam.bookstore.exception.BookErrorException;
 import com.epam.bookstore.service.BookService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -19,12 +14,16 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
+
 
 public class BookServiceImpl implements BookService {
 
-    @Autowired
+
     private final BookDao bookDao;
+
+    public BookServiceImpl(BookDao bookDao) {
+        this.bookDao = bookDao;
+    }
 
     @Override
     public Book addNewBook(BookDTO bookDTO) {

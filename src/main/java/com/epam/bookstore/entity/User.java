@@ -1,29 +1,89 @@
 package com.epam.bookstore.entity;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.List;
-
+import java.util.*;
 
 @Entity
-@Data
-@NoArgsConstructor
-public class User {
+@Setter
+@Table(name = "user_info")
+public class User implements UserDetails {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
-    @Column(unique = true, nullable = false)
+    @Column(name = "username")
     private String username;
 
-    @Column(unique = true, nullable = false)
-    private String email;
-
+    @Column(name = "password")
     private String password;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    List<UserRole> userRoles;
+    @Column(name = "enabled")
+    private Boolean enabled;
 
+    //账户是否过期
+    @Column(name = "account_Non_Expired")
+    private Boolean accountNonExpired;
+
+    @Column(name = "account_Non_Locked")
+    private Boolean accountNonLocked;
+
+    @Column(name = "credentials_Non_Expired")
+    private Boolean credentialsNonExpired;
+
+    @ManyToMany
+    private List<Role> roles = new ArrayList<>();
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        Set<SimpleGrantedAuthority> authorities = new HashSet<>();
+        roles.forEach(role -> {
+            SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority(role.getName());
+            authorities.add(simpleGrantedAuthority);
+        });
+        return authorities;
+    }
+
+    public Long getId() {
+        return this.id;
+    }
+
+    public List<Role> getRoles() {
+        return this.roles;
+    }
+
+    @Override
+    public String getPassword() {
+        return this.password;
+    }
+
+    @Override
+    public String getUsername() {
+        return this.username;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return this.accountNonExpired;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return this.accountNonLocked;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return this.credentialsNonExpired;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return this.enabled;
+    }
 }
