@@ -7,7 +7,6 @@ import com.epam.bookstore.enums.ResultEnum;
 import com.epam.bookstore.exception.BookErrorException;
 import com.epam.bookstore.entity.Book;
 import com.epam.bookstore.service.impl.BookServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -56,14 +55,15 @@ public class BookController {
 
     @PostMapping("api/book/{id}")
     public ResponseEntity<ResultBody> updateBook(@RequestBody BookDTO bookDTO, @PathVariable("id") Long id) throws BookErrorException {
-        if (bookDTO.getId() == null || bookDTO.getId() == 0 || bookDTO.getId() == id) {
+        if (bookDTO.getId() == null || bookDTO.getId() == 0 || bookDTO.getId().equals(id)) {
             Book book = bookService.updateBook(bookDTO, id);
             return ResponseEntity.ok(ResultBody.success(book));
-        } else if (!bookDTO.getId().equals(id)) throw new BookErrorException(ResultEnum.ID_NOT_MATCH);
-        else throw new BookErrorException(ResultEnum.UNEXPECTED_ERROR);
-
+        } else if (!bookDTO.getId().equals(id)) {
+            throw new BookErrorException(ResultEnum.ID_NOT_MATCH);
+        } else {
+            throw new BookErrorException(ResultEnum.UNEXPECTED_ERROR);
+        }
     }
-
 
     @PostMapping("api/sell-book/{id}")
     public ResponseEntity<ResultBody> sellBook(@PathVariable("id") Long id) throws BookErrorException {

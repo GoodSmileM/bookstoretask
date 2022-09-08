@@ -9,7 +9,6 @@ public class BookErrorException extends RuntimeException {
     public BookErrorException(ResultEnum resultEnum) {
         this.code = resultEnum.getCode();
         this.msg = resultEnum.getMessage();
-
     }
 
     public Integer getCode() {
@@ -19,7 +18,6 @@ public class BookErrorException extends RuntimeException {
     public void setCode(Integer code) {
         this.code = code;
     }
-
 
     public String getMsg() {
         return msg;

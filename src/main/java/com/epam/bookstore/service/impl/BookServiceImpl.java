@@ -14,8 +14,6 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-
-
 public class BookServiceImpl implements BookService {
 
 
@@ -56,9 +54,9 @@ public class BookServiceImpl implements BookService {
     @Override
     public Book findById(Long id) {
         Optional<Book> result = bookDao.findById(id);
-        if (result.isPresent())
+        if (result.isPresent()) {
             return result.get();
-        else {
+        } else {
             throw new BookErrorException(ResultEnum.ID_NOT_FOUND);
         }
     }
@@ -69,7 +67,9 @@ public class BookServiceImpl implements BookService {
         Optional<Book> result = bookDao.findById(id);
         if (result.isPresent()) {
             book = result.get();
-        } else throw new BookErrorException(ResultEnum.ID_NOT_FOUND);
+        } else {
+            throw new BookErrorException(ResultEnum.ID_NOT_FOUND);
+        }
         if(!book.getId().equals(id)){
             throw new BookErrorException(ResultEnum.ID_NOT_MATCH);
         }
@@ -108,13 +108,14 @@ public class BookServiceImpl implements BookService {
         int amount = sellDTO.getNumber();
         Book book;
         Optional<Book> result = bookDao.findById(id);
-        if (result.isPresent())
+        if (result.isPresent()) {
             book = result.get();
-        else {
+        } else {
             throw new BookErrorException(ResultEnum.ID_NOT_FOUND);
         }
-        if (book.getTotalCount() < amount) throw new BookErrorException(ResultEnum.BOOK_SOLD_OUT);
-        else {
+        if (book.getTotalCount() < amount) {
+            throw new BookErrorException(ResultEnum.BOOK_SOLD_OUT);
+        } else {
             book.setTotalCount(book.getTotalCount() - amount);
             book.setSold(book.getSold() + amount);
             bookDao.save(book);
