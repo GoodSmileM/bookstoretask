@@ -1,15 +1,18 @@
 package com.epam.bookstore.entity;
 
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
 import javax.persistence.*;
 import java.util.*;
 
 @Entity
 @Setter
 @Table(name = "user_info")
+@NoArgsConstructor
 public class User implements UserDetails {
 
     @Id
@@ -35,25 +38,47 @@ public class User implements UserDetails {
     @Column(name = "credentials_Non_Expired")
     private Boolean credentialsNonExpired;
 
-    @ManyToMany
-    private List<Role> roles = new ArrayList<>();
+    @OneToOne
+    private Role role;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Set<SimpleGrantedAuthority> authorities = new HashSet<>();
-        roles.forEach(role -> {
-            SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority(role.getName());
-            authorities.add(simpleGrantedAuthority);
-        });
+        authorities.add(new SimpleGrantedAuthority(role.getName()));
         return authorities;
+    }
+
+    public User(
+            long id,
+            String username,
+            Role role,
+//            Date lastPasswordResetDate,
+            String password) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.role = role;
+//        this.lastPasswordResetDate = lastPasswordResetDate;
+    }
+
+    public User(String username, String password, Role role) {
+        this.username = username;
+        this.password = password;
+        this.role = role;
+    }
+
+    public User(long id, String username, String password) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
     }
 
     public Long getId() {
         return this.id;
     }
 
-    public List<Role> getRoles() {
-        return this.roles;
+    public Role getRoles() {
+        return this.role;
     }
 
     @Override

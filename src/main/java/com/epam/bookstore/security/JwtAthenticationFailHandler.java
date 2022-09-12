@@ -15,5 +15,4 @@ public class JwtAthenticationFailHandler implements AuthenticationFailureHandler
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
 
     }
-    //TODO 认证失败处理类
 }
