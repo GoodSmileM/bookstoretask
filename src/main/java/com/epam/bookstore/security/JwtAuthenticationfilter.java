@@ -5,8 +5,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.annotation.Resource;
@@ -33,10 +33,10 @@ public class JwtAuthenticationfilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
         String auth_token = request.getHeader(this.token_header);
         final String auth_token_start = "Bearer ";
-        if (StringUtils.isEmpty(auth_token)){
+       /* if (!StringUtils.hasText(auth_token)){
             return;
-        }
-        if (StringUtils.isNotEmpty(auth_token) && auth_token.startsWith(auth_token_start)) {
+        }*/
+        if (StringUtils.hasText(auth_token) && auth_token.startsWith(auth_token_start)) {
             auth_token = auth_token.substring(auth_token_start.length());
         } else {
             // 不按规范,不允许通过验证

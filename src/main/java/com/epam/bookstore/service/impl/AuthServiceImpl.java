@@ -2,7 +2,6 @@ package com.epam.bookstore.service.impl;
 
 import com.epam.bookstore.dao.UserDao;
 import com.epam.bookstore.dto.common.ResponseUserToken;
-import com.epam.bookstore.dto.common.ResultBody;
 import com.epam.bookstore.entity.User;
 import com.epam.bookstore.enums.ResultEnum;
 import com.epam.bookstore.exception.BookErrorException;

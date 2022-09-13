@@ -1,7 +1,6 @@
 package com.epam.bookstore.dto.common;
 
 import lombok.Data;
-import lombok.experimental.Accessors;
 
 
 @Data
