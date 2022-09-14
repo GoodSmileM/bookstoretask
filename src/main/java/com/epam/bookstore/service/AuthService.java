@@ -1,5 +1,6 @@
 package com.epam.bookstore.service;
 
+import com.epam.bookstore.dto.RegisterDTO;
 import com.epam.bookstore.dto.common.ResponseUserToken;
 import com.epam.bookstore.entity.User;
 
@@ -7,7 +8,7 @@ public interface AuthService {
     /**
      * 注册用户
      */
-    User register(User userDetail);
+    User register(RegisterDTO registerDTO);
 
     /**
      * 登陆

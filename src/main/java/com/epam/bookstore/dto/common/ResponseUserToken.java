@@ -10,7 +10,7 @@ public class ResponseUserToken {
 
     private String token;
 
-    private User userDetail;
+    private String username;
 }
 
 

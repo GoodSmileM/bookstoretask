@@ -1,14 +1,18 @@
 package com.epam.bookstore.service.impl;
 
+import com.epam.bookstore.dao.RoleDao;
 import com.epam.bookstore.dao.UserDao;
+import com.epam.bookstore.dto.RegisterDTO;
 import com.epam.bookstore.dto.common.ResponseUserToken;
 import com.epam.bookstore.entity.User;
 import com.epam.bookstore.enums.ResultEnum;
+import com.epam.bookstore.exception.AuthErrorException;
 import com.epam.bookstore.exception.BookErrorException;
 import com.epam.bookstore.security.JwtUtils;
 import com.epam.bookstore.service.AuthService;
 import com.epam.bookstore.security.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
@@ -16,6 +20,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -24,19 +29,20 @@ public class AuthServiceImpl implements AuthService {
     private final UserDetailsService userDetailsService;
     private final JwtUtils jwtTokenUtil;
     private final UserDao userDao;
+    private final RoleDao roleDao;
 
+    @Value("${jwt.tokenHead}")
+    private String tokenHead;
 
     @Autowired
-    public AuthServiceImpl(AuthenticationManager authenticationManager, MyUserDetailsService myUserDetailsService, JwtUtils jwtTokenUtil, UserDao userDao) {
+    public AuthServiceImpl(AuthenticationManager authenticationManager, MyUserDetailsService myUserDetailsService, JwtUtils jwtTokenUtil, UserDao userDao, RoleDao roleDao) {
         this.authenticationManager = authenticationManager;
         this.userDetailsService = myUserDetailsService;
         this.jwtTokenUtil = jwtTokenUtil;
         this.userDao = userDao;
+        this.roleDao = roleDao;
     }
-    @Override
-    public User register(User userDetail) {
-        return null;
-    }
+
 
     @Override
     public ResponseUserToken login(String username, String password) {
@@ -49,12 +55,33 @@ public class AuthServiceImpl implements AuthService {
         final String token = jwtTokenUtil.generateAccessToken(userDetail);
         //存储token
         jwtTokenUtil.putToken(username, token);
-        return new ResponseUserToken(token, userDetail);
+        return new ResponseUserToken(token, username);
     }
 
     @Override
     public void logout(String token) {
+        token = token.substring(tokenHead.length());
+        String userName = jwtTokenUtil.getUsernameFromToken(token);
+        jwtTokenUtil.deleteToken(userName);
+    }
 
+    @Override
+    public User register(RegisterDTO registerDTO) {
+        if (userDao.findByUsername(registerDTO.getUsername()) != null) {
+            throw new AuthErrorException(ResultEnum.USER_EXSISTED);
+        }
+        User user = new User();
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        user.setUsername(registerDTO.getUsername());
+        user.setPassword(encoder.encode(registerDTO.getPassword()));
+        user.setAccountNonExpired(false);
+        user.setEnabled(false);
+        user.setAccountNonLocked(false);
+        user.setCredentialsNonExpired(false);
+        user.setId(registerDTO.getId());
+        user.setRole(roleDao.findById(registerDTO.getRoleId()).get());
+        userDao.save(user);
+        return user;
     }
 
     private Authentication authenticate(String username, String password) {

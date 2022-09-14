@@ -1,5 +1,6 @@
 package com.epam.bookstore.dto.common;
 
+import com.epam.bookstore.enums.ResultEnum;
 import lombok.Data;
 
 
@@ -25,6 +26,10 @@ public class ResultBody {
 
     public static ResultBody error(Integer code, String message) {
         return new ResultBody(code, message).success(false);
+    }
+
+    public static ResultBody error(ResultEnum resultEnum) {
+        return new ResultBody(resultEnum.getCode(), resultEnum.getMessage()).success(false);
     }
 
     public ResultBody code(Integer code) {

@@ -13,4 +13,10 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ResultBody> bookNumberExceptionHandler(BookErrorException e) {
         return ResponseEntity.ok(ResultBody.error(e.getCode(), e.getMsg()));
     }
+
+    //处理用户权限有关的异常
+    @ExceptionHandler(AuthErrorException.class)
+    public ResponseEntity<ResultBody> AuthExceptionHandler(AuthErrorException e) {
+        return ResponseEntity.ok(ResultBody.error(e.getCode(), e.getMsg()));
+    }
 }
