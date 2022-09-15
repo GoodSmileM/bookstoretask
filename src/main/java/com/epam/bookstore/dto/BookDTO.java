@@ -1,9 +1,11 @@
 package com.epam.bookstore.dto;
 
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
+@AllArgsConstructor
 public class BookDTO {
 
     private Long id;
@@ -13,6 +15,9 @@ public class BookDTO {
 
 
     private String title;
+
+
+    private String category;
 
 
     private double price;

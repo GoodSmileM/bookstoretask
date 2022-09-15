@@ -5,9 +5,13 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class SellDTO {
+public class RegisterDTO {
+
+    private String username;
+
+    private String password;
 
     private Long id;
 
-    private int number;
+    private Long roleId;
 }

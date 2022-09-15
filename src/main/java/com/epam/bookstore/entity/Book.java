@@ -1,17 +1,20 @@
-package com.epam.bookstore.model;
+package com.epam.bookstore.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-//test
 
+@AllArgsConstructor
 @Data
+@NoArgsConstructor
 @Entity
-@Table(name = "BookInfo")
+@Table(name = "book_info")
 public class Book {
     @Id
     @Column(name = "id")
@@ -22,6 +25,9 @@ public class Book {
 
     @Column(name = "title")
     private String title;
+
+    @Column(name = "category")
+    private String category;
 
     @Column(name = "price")
     private double price;
