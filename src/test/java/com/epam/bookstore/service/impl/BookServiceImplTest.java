@@ -97,7 +97,6 @@ class BookServiceImplTest {
     void updateBookSuccess() {
         Mockito.when(bookDao.findById(any())).thenReturn(Optional.of(UPDATE_BOOK_ENTITY));
         Mockito.when(bookDao.save(any())).thenReturn(UPDATE_BOOK_ENTITY);
-
         Assertions.assertEquals(UPDATE_PRICE, bookService.updateBook(UPDATE_BOOK_DTO, ID).getPrice());
     }
 

@@ -5,6 +5,7 @@ import com.epam.bookstore.dto.LoginDTO;
 import com.epam.bookstore.dto.RegisterDTO;
 import com.epam.bookstore.dto.common.ResultBody;
 import com.epam.bookstore.enums.ResultEnum;
+import com.epam.bookstore.exception.AuthErrorException;
 import com.epam.bookstore.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -47,7 +48,7 @@ public class AuthController {
     @PostMapping("/register")
     ResponseEntity<ResultBody> register(@RequestBody RegisterDTO registerDTO) {
         if (!StringUtils.hasText(registerDTO.getUsername())||!StringUtils.hasText(registerDTO.getPassword())) {
-            return ResponseEntity.ok(ResultBody.error(ResultEnum.ILLEGAL_PARAM));
+            throw new AuthErrorException(ResultEnum.ILLEGAL_PARAM);
         }
         return ResponseEntity.ok(ResultBody.success(authService.register(registerDTO)).message("注册成功"));
     }

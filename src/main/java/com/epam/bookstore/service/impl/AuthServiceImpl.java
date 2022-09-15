@@ -59,10 +59,11 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public void logout(String token) {
+    public boolean logout(String token) {
         token = token.substring(tokenHead.length());
         String userName = jwtTokenUtil.getUsernameFromToken(token);
         jwtTokenUtil.deleteToken(userName);
+        return true;
     }
 
     @Override

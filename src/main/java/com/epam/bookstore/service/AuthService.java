@@ -19,5 +19,5 @@ public interface AuthService {
     /**
      * 登出
      */
-    void logout(String token);
+    boolean logout(String token);
 }
