@@ -5,7 +5,6 @@ import com.epam.bookstore.dto.RegisterDTO;
 import com.epam.bookstore.dto.common.ResponseUserToken;
 import com.epam.bookstore.entity.User;
 import com.epam.bookstore.exception.AuthErrorException;
-import com.epam.bookstore.service.AuthService;
 import com.epam.bookstore.service.impl.AuthServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,9 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.web.context.WebApplicationContext;
 
-import javax.servlet.http.HttpServletRequest;
-
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 
 @SpringBootTest
