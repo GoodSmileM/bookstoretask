@@ -74,10 +74,10 @@ public class AuthServiceImpl implements AuthService {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         user.setUsername(registerDTO.getUsername());
         user.setPassword(encoder.encode(registerDTO.getPassword()));
-        user.setAccountNonExpired(false);
-        user.setEnabled(false);
-        user.setAccountNonLocked(false);
-        user.setCredentialsNonExpired(false);
+        user.setAccountNonExpired(true);
+        user.setEnabled(true);
+        user.setAccountNonLocked(true);
+        user.setCredentialsNonExpired(true);
         user.setId(registerDTO.getId());
         user.setRole(roleDao.findById(registerDTO.getRoleId()).get());
         userDao.save(user);
