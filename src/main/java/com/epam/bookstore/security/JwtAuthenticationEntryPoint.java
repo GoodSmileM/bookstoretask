@@ -2,6 +2,7 @@ package com.epam.bookstore.security;
 
 import com.epam.bookstore.dto.common.ResultBody;
 import com.epam.bookstore.enums.ResultEnum;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;

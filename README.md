@@ -5,7 +5,7 @@
 * MySQL
 * Spring Data JPA
 
-##Requirements
+## Requirements
 * Addition of book: Addition of book is done by two end points.
     “/api/add-new-book”: If the book is not registered before, it should be registered and the amount of books to be added can be specified.
     “api/add-book”: For the book that are already registered into database, you can just add amount of books to be added to the already registered book.
